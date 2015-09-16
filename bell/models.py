@@ -3,6 +3,7 @@ from django.db import models
 
 # Objects from the model schema of MVC
 
+# "Account" has a doubtful utility
 class Account(models.Model):
     # Account class represents the device owner's information
     # accountId = models.AutoField(primary_key=True)
@@ -25,7 +26,8 @@ class Visitor(models.Model):
 
 class Visit(models.Model):
     # shit happens
-    visitor = models.ForeignKey(Visitor)
+    # Is it mandatory for a visit to have a visitor? what if the visitor is unknown?
+    visitor = models.ForeignKey(Visitor, null=True, blank=True, default=None)
     date = models.DateTimeField('Fecha de Visita')
 
     def __str__(self):
@@ -36,6 +38,7 @@ class Message(models.Model):
     # Message class represents each message delivered from a visitor to the owner
     # messageId = models.AutoField(primary_key=True)
     visitor = models.ForeignKey(Visitor)
+    visit = models.ForeignKey(Visit)
     # audio files handling needs to be defined
     # message = ??
     date = models.DateTimeField('Message Date')
