@@ -8,7 +8,7 @@
     {% if latest_visits_list %}
         <ul>
         {% for visit in latest_visits_list %}
-            <li><a href="/bell/{{ visit.visitor.id }}/">Mr. {{ visit.visitor }} on {{ visit.date }}</a></li>
+            <li><a href="{% url 'bell:detail' visit.visitor.id %}">Mr. {{ visit.visitor }} on {{ visit.date }}</a></li>
         {% endfor %}
         </ul>
     {% else %}
