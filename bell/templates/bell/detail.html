@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<h1>{{ visitor }}</h1>
+<ul>
+    {% for visit in visitor.visit_set.all %}
+        <li>{{ visit.date }}</li>
+    {% endfor %}
+</ul>
+</body>
+</html>

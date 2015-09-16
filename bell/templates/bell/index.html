@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Last visits</title>
+</head>
+<body>
+    {% if latest_visits_list %}
+        <ul>
+        {% for visit in latest_visits_list %}
+            <li><a href="/bell/{{ visit.visitor.id }}/">Mr. {{ visit.visitor }} on {{ visit.date }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No visits were made</p>
+    {% endif %}
+</body>
+</html>
