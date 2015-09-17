@@ -9,13 +9,26 @@ def index(request):
     return render(request, 'bell/index.html')
 
 
-def detail(request, visitId):
+def visit_detail(request, visitId):
     # try:
     #     visitor = Visitor.objects.get(pk=visitorId)
     # except Visitor.DoesNotExist:
     #     raise Http404("Visitor does not exist")
     visit = get_object_or_404(Visit, pk=visitId)
-    return render(request, 'bell/detail.html', {'visit': visit})
+    return render(request, 'bell/visitDetail.html', {'visit': visit})
+
+
+def visitors_management(request):
+    visitors_list = Visitor.objects.order_by('-name')
+    context = RequestContext(request, {
+        'visitors_list': visitors_list,
+    })
+    return render(request, 'bell/visitorsManagement.html', context)
+
+
+def visitor_details(request, visitorId):
+    visitor = get_object_or_404(Visitor, pk=visitorId)
+    return render(request, 'bell/visitorDetail.html', {'visitor': visitor})
 
 
 def results(request, visitorId):

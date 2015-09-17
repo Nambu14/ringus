@@ -17,17 +17,17 @@ class Visitor(models.Model):
     # Visitor class represents each visitor stored in the doorbell system
     name = models.CharField(max_length=200)
     surname = models.CharField(max_length=200)
+    welcome = models.BooleanField(default=True)
 
     def __unicode__(self):
         return self.name + ' ' + self.surname
 
 
 class Visit(models.Model):
-    # shit happens
     # Is it mandatory for a visit to have a visitor? what if the visitor is unknown?
     visitor = models.ForeignKey(Visitor, null=True, blank=True, default=None)
     date = models.DateTimeField('Fecha de Visita')
-    welcome = models.BooleanField(default=True)
+    # visit should store the picture taken from the visitor?
 
     def __unicode__(self):
         return self.visitor.__unicode__() + ' ' + self.date.__str__()

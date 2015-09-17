@@ -6,6 +6,13 @@
     <h3>This will be the index page for the website!!</h3>
 </head>
 <body>
-    <a href="{% url 'bell:record' %}">Go to the visit record</a>
+    <ul>
+        <li>
+             <a href="{% url 'bell:record' %}">Go to the visit record</a>
+        </li>
+        <li>
+            <a href="{% url 'bell:visitorManagement' %}">Go to the visitors page</a>
+        </li>
+    </ul>
 </body>
 </html>
