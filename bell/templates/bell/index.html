@@ -2,17 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Last visits</title>
+    <title>Index page</title>
+    <h3>This will be the index page for the website!!</h3>
 </head>
 <body>
-    {% if latest_visits_list %}
-        <ul>
-        {% for visit in latest_visits_list %}
-            <li><a href="{% url 'bell:detail' visit.visitor.id %}">Mr. {{ visit.visitor }} on {{ visit.date }}</a></li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>No visits were made</p>
-    {% endif %}
+    <a href="{% url 'bell:record' %}">Go to the visit record</a>
 </body>
 </html>

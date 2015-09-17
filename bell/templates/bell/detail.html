@@ -5,11 +5,18 @@
     <title></title>
 </head>
 <body>
+
 <h1>{{ visitor }}</h1>
-<ul>
-    {% for visit in visitor.visit_set.all %}
-        <li>{{ visit.date }}</li>
-    {% endfor %}
-</ul>
+
+{% if error_message %}
+    <p><strong>{{ error_message }}</strong></p>
+{% endif %}
+
+<form action="/your_name/" method="post">
+    <label for="your_name">Your name: </label>
+    <input id="your_name" type="text" name="your_name" value="{{ current_name }}">
+    <input type="submit" value="OK">
+</form>
+
 </body>
 </html>
