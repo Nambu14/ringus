@@ -26,7 +26,7 @@ class Visitor(models.Model):
 class Visit(models.Model):
     # Is it mandatory for a visit to have a visitor? what if the visitor is unknown?
     visitor = models.ForeignKey(Visitor, null=True, blank=True, default=None)
-    date = models.DateTimeField('Fecha de Visita')
+    date = models.DateTimeField('Date of Visit')
     # visit should store the picture taken from the visitor?
 
     def __unicode__(self):

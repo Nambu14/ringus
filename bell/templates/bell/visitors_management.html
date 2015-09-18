@@ -10,7 +10,7 @@
         <ul>
             {% for visitor in visitors_list %}
             <li> {{ visitor }}   </li>
-            <form action="{% url 'bell:visitorDetails' visitor.id %}">
+            <form action="{% url 'bell:visitor_details' visitor.id %}">
                 <input type="submit" value="Go to details!">
             </form>
             {% endfor %}
