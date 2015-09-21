@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^(?P<visit_id>[0-9]+)/$', views.visit_detail, name='visit_detail'),
     url(r'^(?P<visitor_id>[0-9]+)/results/$', views.results, name='results'),
     url(r'^(?P<visitor_id>[0-9]+)/message/$', views.message, name='message'),
+    url(r'^contact/$', views.contact, name='contact'),
 ]

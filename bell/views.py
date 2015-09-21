@@ -2,6 +2,9 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import RequestContext, loader
 from django.shortcuts import render, get_object_or_404
 from .models import Visitor, Visit
+from forms import ContactForm, VisitorForm
+from django.core.mail import send_mail
+
 # Create your views here.
 
 
@@ -48,3 +51,29 @@ def visit_record(request):
     })
     # return HttpResponse(template.render(context))
     return render(request, 'bell/visit_record.html', context)
+
+
+def contact(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            send_mail(
+                cd['subject'],
+                cd['message'],
+                cd.get('email', 'noreply@example.com'),
+                ['example@gmail.com'],
+            )
+            return HttpResponseRedirect('/contact/thanks/')
+    else:
+        form = ContactForm()
+    return render(request, 'bell/contact.html', {'form': form})
+
+
+def edit_visitor(request, id):
+    instance = get_object_or_404(Visitor, id)
+    form = VisitorForm(request.POST or None, instance=instance)
+    if form.is_valid():
+        form.save()
+        # return redirect
+    return render()
