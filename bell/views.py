@@ -1,11 +1,14 @@
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import RequestContext, loader
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Visitor, Visit
+from .models import *
+from .serializers import *
 from forms import ContactForm
 from django.core.mail import send_mail
 from django.views.generic.edit import UpdateView, CreateView
-
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 # Create your views here.
 
 
@@ -93,3 +96,49 @@ class VisitorCreate(CreateView):
     fields = '__all__'
     template_name_suffix = '_create'
     success_url = 'http://127.0.0.1:8000/bell/visitors/'
+
+
+# REST code
+@api_view(['GET', 'POST'])
+def visitor_list(request, format=None):
+    '''
+    List all visitors or create a new visitor
+    '''
+    if request.method == 'GET':
+        visitors = Visitor.objects.all()
+        serializer = VisitorSerializer(visitors, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = VisitorSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def visitor_detail(request, pk, format=None):
+    '''
+    Retrieve, update or delete any Visitor instance
+    '''
+    try:
+        visitor = Visitor.objects.get(pk=pk)
+    except Visitor.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request .method == 'GET':
+        serializer = VisitorSerializer(visitor)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = VisitorSerializer(visitor, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        visitor.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
