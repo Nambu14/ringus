@@ -9,5 +9,8 @@
     <h4>Name: {{ visitor.name }}</h4>
     <h4>Surname: {{ visitor.surname }}</h4>
     <h4>Is he welcome?: {{ visitor.welcome }}</h4>
+    <form action="{% url 'bell:update_visitor' visitor.id %}">
+        <input type="submit" value="Modify!">
+    </form>
 </body>
 </html>

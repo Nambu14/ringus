@@ -1,9 +1,10 @@
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import RequestContext, loader
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Visitor, Visit
 from forms import ContactForm, VisitorForm
 from django.core.mail import send_mail
+from django.views.generic.edit import UpdateView
 
 # Create your views here.
 
@@ -69,11 +70,19 @@ def contact(request):
         form = ContactForm()
     return render(request, 'bell/contact.html', {'form': form})
 
-
-def edit_visitor(request, id):
-    instance = get_object_or_404(Visitor, id)
+'''
+def edit_visitor(request, visitor_id):
+    instance = get_object_or_404(Visitor, visitor_id)
     form = VisitorForm(request.POST or None, instance=instance)
     if form.is_valid():
         form.save()
-        # return redirect
-    return render()
+        return redirect('http://google.com')
+    return render(request, 'bell/visitor_update_form.html', {'form': form})
+'''
+
+
+class VisitorUpdate(UpdateView):
+    model = Visitor
+    fields = '__all__'
+    template_name_suffix = '_update_form'
+    success_url = 'http://127.0.0.1:8000/bell/visitors/'

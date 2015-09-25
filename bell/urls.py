@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from .views import VisitorUpdate
 
 
 from . import views
@@ -14,4 +15,5 @@ urlpatterns = [
     url(r'^(?P<visitor_id>[0-9]+)/results/$', views.results, name='results'),
     url(r'^(?P<visitor_id>[0-9]+)/message/$', views.message, name='message'),
     url(r'^contact/$', views.contact, name='contact'),
+    url(r'^editvisitor/(?P<pk>[0-9]+)/$', VisitorUpdate.as_view(), name='update_visitor'),
 ]
