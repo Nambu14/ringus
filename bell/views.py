@@ -2,9 +2,9 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import RequestContext, loader
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Visitor, Visit
-from forms import ContactForm, VisitorForm
+from forms import ContactForm
 from django.core.mail import send_mail
-from django.views.generic.edit import UpdateView
+from django.views.generic.edit import UpdateView, CreateView
 
 # Create your views here.
 
@@ -23,7 +23,7 @@ def visit_detail(request, visit_id):
 
 
 def visitors_management(request):
-    visitors_list = Visitor.objects.order_by('-name')
+    visitors_list = Visitor.objects.order_by('surname')
     context = RequestContext(request, {
         'visitors_list': visitors_list,
     })
@@ -84,5 +84,12 @@ def edit_visitor(request, visitor_id):
 class VisitorUpdate(UpdateView):
     model = Visitor
     fields = '__all__'
-    template_name_suffix = '_update_form'
+    template_name_suffix = '_update'
+    success_url = 'http://127.0.0.1:8000/bell/visitors/'
+
+
+class VisitorCreate(CreateView):
+    model = Visitor
+    fields = '__all__'
+    template_name_suffix = '_create'
     success_url = 'http://127.0.0.1:8000/bell/visitors/'

@@ -18,6 +18,9 @@
     {% else %}
         <p>No visitors saved!</p>
     {% endif %}
+    <form action="{% url 'bell:create_visitor' %}">
+        <input type="submit" value="Create a Visitor">
+    </form>
 </body>
 </html>
 
