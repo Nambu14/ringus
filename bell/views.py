@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 # Create your views here.
 
-
+# WEB views
 def index(request):
     return render(request, 'bell/index.html')
 
@@ -89,7 +89,8 @@ class VisitorCreate(CreateView):
     success_url = 'http://127.0.0.1:8000/bell/visitors/'
 
 
-# REST code
+# REST views
+# Visitor REST
 class VisitorList(generics.ListCreateAPIView):
     queryset = Visitor.objects.all()
     serializer_class = VisitorSerializer
@@ -98,6 +99,40 @@ class VisitorList(generics.ListCreateAPIView):
 class VisitorDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Visitor.objects.all()
     serializer_class = VisitorSerializer
+
+
+# Visit REST
+class VisitList(generics.ListCreateAPIView):
+    queryset = Visit.objects.all()
+    serializer_class = VisitSerializer
+
+
+class VisitDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Visit.objects.all()
+    serializer_class = VisitSerializer
+
+
+# Message REST
+# Is there a need for a complete list of messages?
+class MessageList(generics.ListCreateAPIView):
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializer
+
+
+class MessageDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializer
+
+
+# Notification REST
+class NotificationList(generics.ListCreateAPIView):
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
+
+
+class NotificationDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
 
 
 '''
