@@ -6,7 +6,7 @@ from .serializers import *
 from forms import ContactForm
 from django.core.mail import send_mail
 from django.views.generic.edit import UpdateView, CreateView
-from rest_framework import status, mixins, generics
+from rest_framework import status, mixins, generics, permissions
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
