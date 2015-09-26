@@ -6,6 +6,7 @@ from .serializers import *
 from forms import ContactForm
 from django.core.mail import send_mail
 from django.views.generic.edit import UpdateView, CreateView
+from django.contrib.auth.decorators import login_required
 from rest_framework import status, mixins, generics, permissions
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -13,10 +14,14 @@ from rest_framework.views import APIView
 # Create your views here.
 
 # WEB views
+
+
+@login_required
 def index(request):
     return render(request, 'bell/index.html')
 
 
+@login_required
 def visit_detail(request, visit_id):
     # try:
     #     visitor = Visitor.objects.get(pk=visitorId)
@@ -26,6 +31,7 @@ def visit_detail(request, visit_id):
     return render(request, 'bell/visit_detail.html', {'visit': visit})
 
 
+@login_required
 def visitors_management(request):
     visitors_list = Visitor.objects.order_by('surname')
     context = RequestContext(request, {
@@ -34,20 +40,24 @@ def visitors_management(request):
     return render(request, 'bell/visitors_management.html', context)
 
 
+@login_required
 def visitor_details(request, visitor_id):
     visitor = get_object_or_404(Visitor, pk=visitor_id)
     return render(request, 'bell/visitor_detail.html', {'visitor': visitor})
 
 
+@login_required
 def results(request, visitor_id):
     response = "you are looking at the results of visitor %s."
     return HttpResponse(response % visitor_id)
 
 
+@login_required
 def message(request, visitor_id):
     return HttpResponse("you are leaving a message on visitor %s." % visitor_id)
 
 
+@login_required
 def visit_record(request):
     latest_visits_list = Visit.objects.order_by('-date')
     # template = loader.get_template('bell/visit_record.html')
@@ -58,6 +68,7 @@ def visit_record(request):
     return render(request, 'bell/visit_record.html', context)
 
 
+@login_required
 def contact(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
