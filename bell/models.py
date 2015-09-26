@@ -15,6 +15,7 @@ class Account(models.Model):
 
 class Visitor(models.Model):
     # Visitor class represents each visitor stored in the doorbell system
+    # Expetamus Dominum
     name = models.CharField(max_length=200)
     surname = models.CharField(max_length=200)
     welcome = models.BooleanField(default=True)

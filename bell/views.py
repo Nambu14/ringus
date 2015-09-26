@@ -6,9 +6,10 @@ from .serializers import *
 from forms import ContactForm
 from django.core.mail import send_mail
 from django.views.generic.edit import UpdateView, CreateView
-from rest_framework import status
+from rest_framework import status, mixins, generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.views import APIView
 # Create your views here.
 
 
@@ -73,16 +74,6 @@ def contact(request):
         form = ContactForm()
     return render(request, 'bell/contact.html', {'form': form})
 
-'''
-def edit_visitor(request, visitor_id):
-    instance = get_object_or_404(Visitor, visitor_id)
-    form = VisitorForm(request.POST or None, instance=instance)
-    if form.is_valid():
-        form.save()
-        return redirect('http://google.com')
-    return render(request, 'bell/visitor_update_form.html', {'form': form})
-'''
-
 
 class VisitorUpdate(UpdateView):
     model = Visitor
@@ -99,11 +90,22 @@ class VisitorCreate(CreateView):
 
 
 # REST code
+class VisitorList(generics.ListCreateAPIView):
+    queryset = Visitor.objects.all()
+    serializer_class = VisitorSerializer
+
+
+class VisitorDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Visitor.objects.all()
+    serializer_class = VisitorSerializer
+
+
+'''
 @api_view(['GET', 'POST'])
 def visitor_list(request, format=None):
-    '''
+    """
     List all visitors or create a new visitor
-    '''
+    """
     if request.method == 'GET':
         visitors = Visitor.objects.all()
         serializer = VisitorSerializer(visitors, many=True)
@@ -119,9 +121,9 @@ def visitor_list(request, format=None):
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def visitor_detail(request, pk, format=None):
-    '''
+    """
     Retrieve, update or delete any Visitor instance
-    '''
+    """
     try:
         visitor = Visitor.objects.get(pk=pk)
     except Visitor.DoesNotExist:
@@ -142,3 +144,82 @@ def visitor_detail(request, pk, format=None):
         visitor.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
+class VisitorList(APIView):
+    """
+    List all visitors, or create a new visitor
+    """
+
+    def get(self, request, format=None):
+        visitors = Visitor.objects.all()
+        serializer = VisitorSerializer(visitors, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = VisitorSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class VisitorDetail(APIView):
+    """
+    Retrieve, update or delete a visitor instance
+    """
+
+    def get_object(self, pk):
+        try:
+            return Visitor.objects.get(pk=pk)
+        except Visitor.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        visitor = self.get_object(pk)
+        serializer = VisitorSerializer(visitor)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        visitor = self.get_object(pk)
+        serializer = VisitorSerializer(visitor, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return serializer.data
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        visitor = self.get_object(pk)
+        visitor.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class VisitorList(mixins.ListModelMixin,
+                       mixins.CreateModelMixin,
+                       generics.GenericAPIView):
+    queryset = Visitor.objects.all()
+    serializer_class = VisitorSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+
+class VisitorDetail(mixins.RetrieveModelMixin,
+                         mixins.UpdateModelMixin,
+                         mixins.DestroyModelMixin,
+                         generics.GenericAPIView):
+    queryset = Visitor.objects.all()
+    serializer_class = VisitorSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+'''

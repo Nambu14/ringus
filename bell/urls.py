@@ -17,8 +17,10 @@ urlpatterns = [
     url(r'^editvisitor/(?P<pk>[0-9]+)/$', VisitorUpdate.as_view(), name='update_visitor'),
     url(r'^createvisitor/$', VisitorCreate.as_view(), name='create_visitor'),
     # REST patterns
-    url(r'^restvisitor/(?P<pk>[0-9]+)/$', views.visitor_detail),
-    url(r'^restvisitor/$', views.visitor_list),
+    # url(r'^restvisitor/(?P<pk>[0-9]+)/$', views.visitor_detail),
+    # url(r'^restvisitor/$', views.visitor_list),
+    url(r'^restvisitor/(?P<pk>[0-9]+)/$', views.VisitorDetail.as_view()),
+    url(r'^restvisitor/$', views.VisitorList.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
